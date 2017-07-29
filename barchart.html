@@ -1,19 +1,13 @@
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
-    <title>Visualization</title>
+    <title>CS 498 Final Project</title>
   </head>
-  <h1>NBA MVP 2016-2017</h1>
+  <h1 align="left">NBA MVP 2016-2017</h1>
  <h2>
-<div><a href="index.html">Intro</a> - Player Value - <a href="rank.html">Rankings</a> - <a href="table.html">Further Exploration</a></div>
+<div align="left"><a href="index.html">Intro</a> - Player Value - <a href="rank.html">Rankings</a> - <a href="table.html">Further Exploration</a> - <a href="links.html">Links</a></div>
 </h2>
 <style>
-
-body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  position: relative;
-  width: 960px;
-}
 
 .axis text {
   font: 10px sans-serif;
@@ -33,6 +27,11 @@ body {
 
 .bar:hover {
   fill: brown;
+}
+
+button {
+	margin: auto;
+	display: block;
 }
 
 .x.axis path {
@@ -69,7 +68,7 @@ body {
 }
 
 label {
-  position: absolute;
+  position: relative;
   top: 10px;
   right: 10px;
 }
@@ -80,7 +79,7 @@ label {
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <script>
 
-var margin = {top: 40, right: 20, bottom: 30, left: 40},
+var margin = {top: 40, right: 20, bottom: 40, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -127,6 +126,8 @@ d3.csv("vorpgt5.csv", function(error, data) {
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis)
+	  .selectAll(".tick text")
+		.call(wrap, x.rangeBand());
 	  
   svg.append("g")
       .attr("class", "y axis")
@@ -136,7 +137,7 @@ d3.csv("vorpgt5.csv", function(error, data) {
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("VORP");
+      .text("Value Over Replacement Player (VORP)");
 
   svg.selectAll(".bar")
       .data(data)
@@ -149,6 +150,49 @@ d3.csv("vorpgt5.csv", function(error, data) {
 	  .on('mouseover', tip.show)
 	  .on('mouseout', tip.hide);
 
+function wrap (text, width) {
+
+  text.each(function() {
+
+    var breakChars = ['/', '&', '-'],
+      text = d3.select(this),
+      textContent = text.text(),
+      spanContent;
+
+    breakChars.forEach(char => {
+      // Add a space after each break char for the function to use to determine line breaks
+      textContent = textContent.replace(char, char + ' ');
+    });
+
+    var words = textContent.split(/\s+/).reverse(),
+      word,
+      line = [],
+      lineNumber = 0,
+      lineHeight = 1.1, // ems
+      x = text.attr('x'),
+      y = text.attr('y'),
+      dy = parseFloat(text.attr('dy') || 0),
+      tspan = text.text(null).append('tspan').attr('x', x).attr('y', y).attr('dy', dy + 'em');
+
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(' '));
+      if (tspan.node().getComputedTextLength() > width) {
+        line.pop();
+        spanContent = line.join(' ');
+        breakChars.forEach(char => {
+          // Remove spaces trailing breakChars that were added above
+          spanContent = spanContent.replace(char + ' ', char);
+        });
+        tspan.text(spanContent);
+        line = [word];
+        tspan = text.append('tspan').attr('x', x).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word);
+      }
+    }
+  });
+
+}	  
+	  
   d3.select("input").on("change", change);
   
   var sortTimeout = setTimeout(function() {
@@ -177,9 +221,33 @@ d3.csv("vorpgt5.csv", function(error, data) {
 
     transition.select(".x.axis")
         .call(xAxis)
+		.selectAll(".tick text")
+		.call(wrap, x.rangeBand())
       .selectAll("g")
         .delay(delay);
   }
 });
 
+</script>
+<button onclick="myFunction()" align="center">About the Visualization</button>
+
+<div id="myDIV" style="display: none;">
+	<p>For this project, I used a <b>Martini Glass</b> narrative visualization structure. I begin with author-driven content for the first 3 scenes (specifically including only statistics that I thought best determined which player was the most valuable to his team) and end with reader-driven content by allowing the reader to compare the top performers this year based on other metrics that were in the dataset.</p>
+
+<p><b>Scenes:</b> There are a total of 4 scenes in this narrative visualization, which include a scatterplot, bar charts, and tables. We begin by seeing an overview of the data in a scatterplot for what I think are 2 of the best metrics for evaluating overall performance, Win Shares and Player Efficiency Rating.</p>
+
+<p><b>Annotations:</b> For this visualization, the annotation is the legend that color codes the players by position. Looking at the top right portion of the plot, it appears that many of the top players play the Small Forward position. The size of the points is associated with how many minutes that player played to negate the situations where a player performed extremely well in limited minutes.
+Parameters: The axes change in this visualization since the plot is draggable and zoomable.</p>
+
+<p><b>Triggers:</b> Use the mouse wheel to zoom or click and drag the mouse to view other portions of the graph. Also, if you hover over each point, a tooltip will appear providing more information.</p>
+</div>
+<script>
+function myFunction() {
+    var x = document.getElementById('myDIV');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+}
 </script>

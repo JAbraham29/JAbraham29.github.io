@@ -17,6 +17,11 @@ rect {
   stroke-width: 2px;
 }
 
+button {
+	margin: auto;
+	display: block;
+}
+
 .dot {
   fill-opacity: .5;
 }
