@@ -232,14 +232,15 @@ function wrap (text, width) {
 <button onclick="myFunction()" align="center">About the Visualization</button>
 
 <div id="myDIV" style="display: none;">
-	<p>For this project, I used a <b>Martini Glass</b> narrative visualization structure. I begin with author-driven content for the first 3 scenes (specifically including only statistics that I thought best determined which player was the most valuable to his team) and end with reader-driven content by allowing the reader to compare the top performers this year based on other metrics that were in the dataset.</p>
+	<p>For this project, I used a <b>Martini Glass</b> narrative visualization structure. I began with author-driven content for the first 3 scenes (specifically including only statistics that I thought best determined which player was the most valuable to his team) and ended with reader-driven content by allowing the reader to compare the top performers this year based on other metrics that were in the dataset.</p>
 
-<p><b>Scenes:</b> There are a total of 4 scenes in this narrative visualization, which include a scatterplot, bar charts, and tables. We begin by seeing an overview of the data in a scatterplot for what I think are 2 of the best metrics for evaluating overall performance, Win Shares and Player Efficiency Rating.</p>
+<p><b>Scenes:</b> In the second scene, we see the final statistic that I decided to use to evaluate which player is most valuable, Value Over Replacement Player (VORP). In my opinion, this is the metric that most literally translates to player value as it is the value that the player provides over another player that they would have been replaced with. I've included only those with a VORP value greater than 5 to make the chart more readable and clearly show the difference between the top players.</p>
 
-<p><b>Annotations:</b> For this visualization, the annotation is the legend that color codes the players by position. Looking at the top right portion of the plot, it appears that many of the top players play the Small Forward position. The size of the points is associated with how many minutes that player played to negate the situations where a player performed extremely well in limited minutes.
-Parameters: The axes change in this visualization since the plot is draggable and zoomable.</p>
+<p><b>Annotations:</b> The tooltip that appears as you hover over each bar is the annotation for this bar chart. It easily provides the reader with the VORP value for the highlighted player.</p>
 
-<p><b>Triggers:</b> Use the mouse wheel to zoom or click and drag the mouse to view other portions of the graph. Also, if you hover over each point, a tooltip will appear providing more information.</p>
+<p><b>Parameters:</b> The parameter for this plot is the sorting of VORP values, from greatest to least.</p>
+
+<p><b>Triggers:</b> Hovering over each bar shows the tooltip providing the VORP value for that individual. The other trigger is clicking on the checkbox to sort the bars by VORP value, from greatest to least. The bars are automatically sorted once the page has fully loaded and can be unsorted by clicking on the checkbox.</p>
 </div>
 <script>
 function myFunction() {
